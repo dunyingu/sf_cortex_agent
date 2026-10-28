@@ -1,0 +1,963 @@
+name: RETAIL_PERFORMANCE_DRAFT
+description: Draft semantic model to measure Retail store performance
+tables:
+- name: DIM_CUSTOMER_RETAIL_STORE_VW
+  base_table:
+    database: EDP_PROD
+    schema: PRES
+    table: '"Dim_Customer_Retail_Store_VW"'
+  dimensions:
+  - name: BANNER_GROUP_NAME
+    synonyms:
+    - banner_group
+    - group_name
+    - store_group
+    - retail_group
+    - store_banner
+    description: The name of the retail store's banner group, which represents a grouping
+      of retail stores under a common brand or marketing identity.
+    expr: '"Banner Group Name"'
+    data_type: VARCHAR(50)
+  - name: CUSTOMER_RETAIL_STORE_KEY
+    synonyms:
+    - retail_store_id
+    - store_key
+    - customer_store_identifier
+    - retail_store_identifier
+    - store_unique_key
+    description: Unique identifier for a retail store where a customer made a purchase.
+    expr: '"Customer Retail Store Key"'
+    data_type: NUMBER(38,0)
+  - name: IS_POS_FLAG
+    synonyms:
+    - is_pos_consent
+    - pos_consent_flag
+    - point_of_sale_flag
+    - is_pos_enabled
+    - pos_status
+    description: Indicates whether the customer is a point of sale (POS) customer,
+      with possible values of 'YES' or 'NO'.
+    expr: '"Is POS Flag"'
+    data_type: VARCHAR(3)
+  - name: POS_SOFTWARE_NAME
+    synonyms:
+    - point_of_sale_software_name
+    - pos_system_name
+    - retail_software_name
+    - store_software_name
+    - transaction_software_name
+    description: The name of the point-of-sale (POS) software used by the retail store.
+    expr: '"POS Software Name"'
+    data_type: VARCHAR(50)
+  - name: SITE_LINK_CODE
+    synonyms:
+    - site_code
+    - location_code
+    - store_link_id
+    - site_identifier
+    - location_identifier
+    description: Unique identifier for the retail store location.
+    expr: '"Site Link Code"'
+    data_type: VARCHAR(500)
+  - name: STATE_CODE
+    synonyms:
+    - state_abbreviation
+    - state_id
+    - region_code
+    - province_code
+    - territory_code
+    - geographic_code
+    description: The two-character code representing the state where the retail store
+      is located.
+    expr: '"State Code"'
+    data_type: VARCHAR(50)
+  - name: STORE_CODE
+    synonyms:
+    - store_id_number
+    - store_identifier
+    - retail_store_code
+    - outlet_code
+    - location_code
+    description: Unique identifier for the retail store where the customer made a
+      purchase.
+    expr: '"Store Code"'
+    data_type: VARCHAR(50)
+  - name: STORE_NAME
+    synonyms:
+    - store_title
+    - retail_store_name
+    - shop_name
+    - outlet_name
+    - store_identity
+    - retail_outlet_name
+    - store_designation
+    description: The name of the retail store where the customer made a purchase.
+    expr: '"Store Name"'
+    data_type: VARCHAR(500)
+  primary_key:
+    columns:
+    - CUSTOMER_RETAIL_STORE_KEY
+  description: The table contains records of retail store locations, specifically
+    customer-facing stores. Each record includes details about the store's identification,
+    location, and operational setup.
+- name: DIM_DATE_VW
+  base_table:
+    database: EDP_PROD
+    schema: PRES
+    table: '"Dim_Date_VW"'
+  dimensions:
+  - name: DATE_DD_MMM_YY_
+    expr: '"Date (DD MMM YY)"'
+    data_type: VARCHAR(20)
+    description: 'Here is the description of the column:
+
+
+      The date in the format of day, abbreviated month, and two-digit year.'
+  - name: DATE_DD_MMM_YYYY_
+    expr: '"Date (DD MMM YYYY)"'
+    data_type: VARCHAR(20)
+    description: 'Here is the description of the column:
+
+
+      The date in the format of day, abbreviated month, and four-digit year.'
+  - name: DATE_NAME
+    expr: '"Date Name"'
+    data_type: VARCHAR(50)
+    description: Date name.
+  - name: DAY_MONTH_YEAR_DD_MM_YYYY_
+    expr: '"Day Month Year (DD/MM/YYYY)"'
+    data_type: VARCHAR(134217728)
+    description: 'Here is the description of the column:
+
+
+      The date in the format of day, month, and year.'
+  - name: DAY_NAME_
+    expr: '"Day (Name)"'
+    data_type: VARCHAR(50)
+    description: The day of the week.
+  - name: DAY_OF_HALF_YEAR_NAME_
+    expr: '"Day of Half Year (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The day of the half year, represented as a name.'
+  - name: DAY_OF_MONTH_NAME_
+    expr: '"Day of Month (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The day of the month, represented by its name.'
+  - name: DAY_OF_QUARTER_NAME_
+    expr: '"Day of Quarter (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The day of the quarter, represented as a name.'
+  - name: DAY_OF_WEEK_NAME_
+    expr: '"Day of Week (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The day of the week, represented by its full name.'
+  - name: DAY_OF_YEAR_NAME_
+    expr: '"Day of Year (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The day of the year, represented by its name.'
+  - name: DAY_TYPE
+    expr: '"Day Type"'
+    data_type: VARCHAR(20)
+    description: 'Here is the description of the column:
+
+
+      The day of the week.'
+  - name: FINANCIAL_DAY_NAME_
+    expr: '"Financial Day (Name)"'
+    data_type: VARCHAR(50)
+    description: Financial day of the month, represented as a name.
+  - name: FINANCIAL_DAY_OF_HALF_YEAR_NAME_
+    expr: '"Financial Day of Half Year (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The financial day of the half year, represented as a name.'
+  - name: FINANCIAL_DAY_OF_MONTH_NAME_
+    expr: '"Financial Day of Month (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The day of the month when a financial transaction occurred, represented as a
+      name.'
+  - name: FINANCIAL_DAY_OF_QUARTER_NAME_
+    expr: '"Financial Day of Quarter (Name)"'
+    data_type: VARCHAR(50)
+    description: The day of the quarter for a financial period, represented as a name.
+  - name: FINANCIAL_DAY_OF_WEEK_NAME_
+    expr: '"Financial Day of Week (Name)"'
+    data_type: VARCHAR(50)
+    description: The day of the week on which a financial transaction occurred.
+  - name: FINANCIAL_DAY_OF_YEAR_NAME_
+    expr: '"Financial Day of Year (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The financial day of the year, represented as a name.'
+  - name: FINANCIAL_HALF_YEAR_NAME
+    expr: '"Financial Half Year Name"'
+    data_type: VARCHAR(50)
+    description: Financial half year name.
+  - name: FINANCIAL_HALF_YEAR_OF_YEAR_NAME_
+    expr: '"Financial Half Year of Year (Name)"'
+    data_type: VARCHAR(50)
+    description: Financial half year of the year, represented as a name.
+  - name: FINANCIAL_MONTH_MMM_
+    expr: '"Financial Month (MMM)"'
+    data_type: VARCHAR(50)
+    description: Financial month, represented as a three-letter abbreviation.
+  - name: FINANCIAL_MONTH_NAME
+    expr: '"Financial Month Name"'
+    data_type: VARCHAR(50)
+    description: Financial month name.
+  - name: FINANCIAL_MONTH_OF_HALF_YEAR_NAME_
+    expr: '"Financial Month of Half Year (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The financial month of the half year, represented by a name.'
+  - name: FINANCIAL_MONTH_OF_QUARTER_NAME_
+    expr: '"Financial Month of Quarter (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The financial month of the quarter, represented as a name.'
+  - name: FINANCIAL_MONTH_OF_YEAR_NAME_
+    expr: '"Financial Month of Year (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The financial month of the year, represented as a name.'
+  - name: FINANCIAL_PERIOD_NUMBER
+    expr: '"Financial Period Number"'
+    data_type: VARCHAR(100)
+    description: Financial period number.
+  - name: FINANCIAL_QUARTER_DESCRIPTION_
+    expr: '"Financial Quarter (Description)"'
+    data_type: VARCHAR(100)
+    description: Financial quarter description.
+  - name: FINANCIAL_QUARTER_NAME
+    expr: '"Financial Quarter Name"'
+    data_type: VARCHAR(50)
+    description: Financial quarter name.
+  - name: FINANCIAL_QUARTER_OF_HALF_YEAR_NAME_
+    expr: '"Financial Quarter of Half Year (Name)"'
+    data_type: VARCHAR(50)
+    description: Financial quarter of half year, represented as a name.
+  - name: FINANCIAL_QUARTER_OF_YEAR_NAME_
+    expr: '"Financial Quarter of Year (Name)"'
+    data_type: VARCHAR(50)
+    description: Financial quarter of the year, represented as a name.
+  - name: FINANCIAL_WEEK_NAME
+    expr: '"Financial Week Name"'
+    data_type: VARCHAR(50)
+    description: Financial week name.
+  - name: FINANCIAL_WEEK_OF_YEAR_NAME_
+    expr: '"Financial Week of Year (Name)"'
+    data_type: VARCHAR(50)
+    description: Financial week of the year, represented as a name.
+  - name: FINANCIAL_YEAR_DESCRIPTION_
+    expr: '"Financial Year (Description)"'
+    data_type: VARCHAR(100)
+    description: Financial year description.
+  - name: FINANCIAL_YEAR_NAME_
+    expr: '"Financial Year (Name)"'
+    data_type: VARCHAR(50)
+    description: Financial year name.
+  - name: FULL_DATE_NAME_
+    expr: '"Full Date (Name)"'
+    data_type: VARCHAR(100)
+    description: The full date in the format of a name, typically including the day,
+      month, and year.
+  - name: HALF_YEAR_NAME
+    expr: '"Half Year Name"'
+    data_type: VARCHAR(50)
+    description: Half year name.
+  - name: HALF_YEAR_OF_YEAR_NAME_
+    expr: '"Half Year of Year (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The half year of the year, represented as a name.'
+  - name: IS_WORKING_DAY_ACT_FLAG
+    expr: '"Is Working Day ACT Flag"'
+    data_type: BOOLEAN
+    description: A flag indicating whether the date is a working day.
+  - name: IS_WORKING_DAY_AUS_FLAG
+    expr: '"Is Working Day AUS Flag"'
+    data_type: BOOLEAN
+    description: A flag indicating whether the date is a working day in Australia.
+  - name: IS_WORKING_DAY_NSW_FLAG
+    expr: '"Is Working Day NSW Flag"'
+    data_type: BOOLEAN
+    description: A flag indicating whether the date is a working day in New South
+      Wales.
+  - name: IS_WORKING_DAY_NT_FLAG
+    expr: '"Is Working Day NT Flag"'
+    data_type: BOOLEAN
+    description: A flag indicating whether the date is a working day.
+  - name: IS_WORKING_DAY_QLD_FLAG
+    expr: '"Is Working Day QLD Flag"'
+    data_type: BOOLEAN
+    description: A flag indicating whether the date is a working day in Queensland.
+  - name: IS_WORKING_DAY_SA_FLAG
+    expr: '"Is Working Day SA Flag"'
+    data_type: BOOLEAN
+    description: A flag indicating whether the date is a working day in South Australia.
+  - name: IS_WORKING_DAY_TAS_FLAG
+    expr: '"Is Working Day TAS Flag"'
+    data_type: BOOLEAN
+    description: A flag indicating whether the date is a working day according to
+      the TAS (Time and Attendance System) rules.
+  - name: IS_WORKING_DAY_VIC_FLAG
+    expr: '"Is Working Day VIC Flag"'
+    data_type: BOOLEAN
+    description: A flag indicating whether the date is a working day in the Victoria
+      region.
+  - name: IS_WORKING_DAY_WA_FLAG
+    expr: '"Is Working Day WA Flag"'
+    data_type: BOOLEAN
+    description: A flag indicating whether the date is a working day.
+  - name: MONTH_MMM_
+    expr: '"Month (MMM)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The abbreviated month of the year.'
+  - name: MONTH_NAME
+    expr: '"Month Name"'
+    data_type: VARCHAR(50)
+    description: The full month name.
+  - name: MONTH_OF_HALF_YEAR_NAME_
+    expr: '"Month of Half Year (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The month of the half year, represented by its name.'
+  - name: MONTH_OF_QUARTER_NAME_
+    expr: '"Month of Quarter (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The month of the quarter, represented by its name.'
+  - name: MONTH_OF_YEAR_NAME_
+    expr: '"Month of Year (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The month of the year, represented by its full name.'
+  - name: MONTH_YEAR_MMM_YY_
+    expr: '"Month Year (MMM YY)"'
+    data_type: VARCHAR(20)
+    description: 'Here is the description of the column:
+
+
+      The month and year of a date in abbreviated format.'
+  - name: MONTH_YEAR_MMM_YY__8E31E29D_0892_4B5C_B3DE_7B83DD96EA6E
+    expr: '"Month Year (MMM-YY)"'
+    data_type: VARCHAR(20)
+    description: 'Here is the description of the column:
+
+
+      The month and year of a date in the format of a three-letter month abbreviation
+      followed by a two-digit year.'
+  - name: QUARTER_LONG_NAME
+    expr: '"Quarter Long Name"'
+    data_type: VARCHAR(50)
+    description: The name of the quarter, typically in the format "Q1", "Q2", etc.
+  - name: QUARTER_OF_HALF_YEAR_NAME_
+    expr: '"Quarter of Half Year (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The quarter or half year, represented by its name.'
+  - name: QUARTER_OF_YEAR_NAME_
+    expr: '"Quarter of Year (Name)"'
+    data_type: VARCHAR(50)
+    description: 'Here is the description of the column:
+
+
+      The quarter of the year, represented by its name.'
+  - name: QUARTER_YYYY_QQ_
+    expr: '"Quarter (YYYY QQ)"'
+    data_type: VARCHAR(100)
+    description: The quarter of the year, represented as a four-digit year and a two-digit
+      quarter number.
+  - name: SHORT_DATE_NAME_
+    expr: '"Short Date (Name)"'
+    data_type: VARCHAR(100)
+    description: 'Here is the description of the column:
+
+
+      A short date name.'
+  - name: WEEK_NAME
+    expr: '"Week Name"'
+    data_type: VARCHAR(50)
+    description: The week of the year, represented as a name.
+  - name: WEEK_OF_YEAR_NAME_
+    expr: '"Week of Year (Name)"'
+    data_type: VARCHAR(50)
+    description: The week of the year, represented as a name.
+  - name: YEAR_MONTH_YYYYMM_
+    expr: '"Year Month (YYYYMM)"'
+    data_type: VARCHAR(10)
+    description: 'Here is the description of the column:
+
+
+      The year and month of a date in the format YYYYMM.'
+  - name: YEAR_NAME
+    expr: '"Year Name"'
+    data_type: VARCHAR(50)
+    description: The year name.
+  - name: YEAR_NAME_
+    expr: '"Year (Name)"'
+    data_type: VARCHAR(50)
+    description: The year represented as a name.
+  time_dimensions:
+  - name: DATE_KEY
+    expr: '"Date Key"'
+    data_type: NUMBER(38,0)
+  - name: DAY_INDICATOR
+    expr: '"Day Indicator"'
+    data_type: NUMBER(9,0)
+  - name: DAY_OF_HALF_YEAR
+    expr: '"Day of Half Year"'
+    data_type: NUMBER(38,0)
+  - name: DAY_OF_MONTH
+    expr: '"Day of Month"'
+    data_type: NUMBER(38,0)
+  - name: DAY_OF_QUARTER
+    expr: '"Day of Quarter"'
+    data_type: NUMBER(38,0)
+  - name: DAY_OF_WEEK
+    expr: '"Day of Week"'
+    data_type: NUMBER(38,0)
+  - name: DAY_OF_YEAR
+    expr: '"Day of Year"'
+    data_type: NUMBER(38,0)
+  - name: FINANCIAL_DAY
+    expr: '"Financial Day"'
+    data_type: TIMESTAMP_NTZ(9)
+  - name: FINANCIAL_DAY_OF_HALF_YEAR
+    expr: '"Financial Day of Half Year"'
+    data_type: NUMBER(38,0)
+  - name: FINANCIAL_DAY_OF_MONTH
+    expr: '"Financial Day of Month"'
+    data_type: NUMBER(38,0)
+  - name: FINANCIAL_DAY_OF_QUARTER
+    expr: '"Financial Day of Quarter"'
+    data_type: NUMBER(38,0)
+  - name: FINANCIAL_DAY_OF_WEEK
+    expr: '"Financial Day of Week"'
+    data_type: NUMBER(38,0)
+  - name: FINANCIAL_DAY_OF_YEAR
+    expr: '"Financial Day of Year"'
+    data_type: NUMBER(38,0)
+  - name: FINANCIAL_HALF_YEAR_OF_YEAR
+    expr: '"Financial Half Year of Year"'
+    data_type: NUMBER(38,0)
+  - name: FINANCIAL_HALF_YEAR_START_DATE
+    expr: '"Financial Half Year Start Date"'
+    data_type: TIMESTAMP_NTZ(9)
+  - name: FINANCIAL_MONTH_OF_HALF_YEAR
+    expr: '"Financial Month of Half Year"'
+    data_type: NUMBER(38,0)
+  - name: FINANCIAL_MONTH_OF_QUARTER
+    expr: '"Financial Month of Quarter"'
+    data_type: NUMBER(38,0)
+  - name: FINANCIAL_MONTH_OF_YEAR
+    expr: '"Financial Month of Year"'
+    data_type: NUMBER(38,0)
+  - name: FINANCIAL_MONTH_START_DATE
+    expr: '"Financial Month Start Date"'
+    data_type: TIMESTAMP_NTZ(9)
+  - name: FINANCIAL_QUARTER_OF_HALF_YEAR
+    expr: '"Financial Quarter of Half Year"'
+    data_type: NUMBER(38,0)
+  - name: FINANCIAL_QUARTER_OF_YEAR
+    expr: '"Financial Quarter of Year"'
+    data_type: NUMBER(38,0)
+  - name: FINANCIAL_QUARTER_START_DATE
+    expr: '"Financial Quarter Start Date"'
+    data_type: TIMESTAMP_NTZ(9)
+  - name: FINANCIAL_WEEK_OF_YEAR
+    expr: '"Financial Week of Year"'
+    data_type: NUMBER(38,0)
+  - name: FINANCIAL_WEEK_START_DATE
+    expr: '"Financial Week Start Date"'
+    data_type: TIMESTAMP_NTZ(9)
+  - name: FINANCIAL_YEAR
+    expr: '"Financial Year"'
+    data_type: NUMBER(38,0)
+  - name: FINANCIAL_YEAR_START_DATE
+    expr: '"Financial Year Start Date"'
+    data_type: TIMESTAMP_NTZ(9)
+  - name: FIRST_MONTH_CALENDAR_YEAR_TO_DATE
+    expr: '"First Month Calendar Year To Date"'
+    data_type: DATE
+  - name: FULL_DATE
+    expr: '"Full Date"'
+    data_type: TIMESTAMP_NTZ(9)
+  - name: HALF_YEAR_OF_YEAR
+    expr: '"Half Year of Year"'
+    data_type: NUMBER(38,0)
+  - name: HALF_YEAR_START_DATE
+    expr: '"Half Year Start Date"'
+    data_type: TIMESTAMP_NTZ(9)
+  - name: IS_LAST_WORKING_DAY_FLAG
+    expr: '"Is Last Working Day Flag"'
+    data_type: NUMBER(1,0)
+  - name: IS_THIS_DAY_THIS_MONTH_FLAG
+    expr: '"Is This Day This Month Flag"'
+    data_type: NUMBER(1,0)
+  - name: IS_YESTERDAY_FLAG
+    expr: '"Is Yesterday Flag"'
+    data_type: NUMBER(1,0)
+  - name: LAST_MONTH_THIS_YEAR
+    expr: '"Last Month This Year"'
+    data_type: DATE
+  - name: LAST_WORKING_DATE
+    expr: '"Last Working Date"'
+    data_type: TIMESTAMP_NTZ(9)
+  - name: MONTH_INDICATOR
+    expr: '"Month Indicator"'
+    data_type: NUMBER(9,0)
+  - name: MONTH_OF_HALF_YEAR
+    expr: '"Month of Half Year"'
+    data_type: NUMBER(38,0)
+  - name: MONTH_OF_QUARTER
+    expr: '"Month of Quarter"'
+    data_type: NUMBER(38,0)
+  - name: MONTH_OF_YEAR
+    expr: '"Month of Year"'
+    data_type: NUMBER(38,0)
+  - name: MONTH_START_DATE
+    expr: '"Month Start Date"'
+    data_type: TIMESTAMP_NTZ(9)
+  - name: QUARTER_OF_HALF_YEAR
+    expr: '"Quarter of Half Year"'
+    data_type: NUMBER(38,0)
+  - name: QUARTER_OF_YEAR
+    expr: '"Quarter of Year"'
+    data_type: NUMBER(38,0)
+  - name: QUARTER_START_DATE
+    expr: '"Quarter Start Date"'
+    data_type: TIMESTAMP_NTZ(9)
+  - name: WEEK_INDICATOR
+    expr: '"Week Indicator"'
+    data_type: NUMBER(10,0)
+  - name: WEEK_OF_YEAR
+    expr: '"Week of Year"'
+    data_type: NUMBER(38,0)
+  - name: WEEK_START_DATE
+    expr: '"Week Start Date"'
+    data_type: TIMESTAMP_NTZ(9)
+  - name: YEAR
+    expr: '"Year"'
+    data_type: NUMBER(38,0)
+  - name: YEAR_INDICATOR
+    expr: '"Year Indicator"'
+    data_type: NUMBER(8,0)
+  - name: YEAR_START_DATE
+    expr: '"Year Start Date"'
+    data_type: TIMESTAMP_NTZ(9)
+  - name: YESTERDAY_DATE
+    expr: '"Yesterday Date"'
+    data_type: DATE
+  primary_key:
+    columns:
+    - DATE_KEY
+  description: The table contains records of dates, specifically date keys and corresponding
+    date formats. Each record represents a single date and includes various formats
+    for displaying and categorizing it.
+- name: DIM_PRODUCT_RETAIL_MASTER_VW
+  base_table:
+    database: EDP_PROD
+    schema: PRES
+    table: '"Dim_Product_Retail_Master_VW"'
+  dimensions:
+  - name: IQVIA_PRODUCT_HIERARCHY_LEVEL_1_DESCRIPTION
+    expr: '"IQVIA Product Hierarchy Level 1 Description"'
+    data_type: VARCHAR(500)
+    description: The description of the product hierarchy level 1, as provided by
+      IQVIA.
+  - name: IQVIA_PRODUCT_HIERARCHY_LEVEL_2_DESCRIPTION
+    expr: '"IQVIA Product Hierarchy Level 2 Description"'
+    data_type: VARCHAR(500)
+    description: IQVIA Product Hierarchy Level 2 description.
+  - name: IQVIA_PRODUCT_HIERARCHY_LEVEL_3_DESCRIPTION
+    expr: '"IQVIA Product Hierarchy Level 3 Description"'
+    data_type: VARCHAR(500)
+    description: IQVIA Product Hierarchy Level 3 description.
+  - name: IQVIA_PRODUCT_HIERARCHY_LEVEL_4_DESCRIPTION
+    expr: '"IQVIA Product Hierarchy Level 4 Description"'
+    data_type: VARCHAR(500)
+    description: IQVIA Product Hierarchy Level 4 description.
+  - name: IQVIA_PRODUCT_HIERARCHY_LEVEL_5_DESCRIPTION
+    expr: '"IQVIA Product Hierarchy Level 5 Description"'
+    data_type: VARCHAR(500)
+    description: IQVIA Product Hierarchy Level 5 description.
+  - name: MASTER_PRODUCT_DESCRIPTION
+    expr: '"Master Product Description"'
+    data_type: VARCHAR(500)
+    description: The detailed description of the product.
+  - name: MASTER_PRODUCT_ID
+    expr: '"Master Product ID"'
+    data_type: NUMBER(38,0)
+    description: A unique identifier for a retail product.
+  - name: PRIMARY_WHOLESALE_PRODUCT_KEY
+    expr: '"Primary Wholesale Product Key"'
+    data_type: NUMBER(38,0)
+    description: A unique identifier for a primary wholesale product.
+  - name: PRODUCT_RETAIL_MASTER_KEY
+    expr: '"Product Retail Master Key"'
+    data_type: NUMBER(38,0)
+    description: A unique identifier for the product retail master record.
+  - name: SIGMA_PRODUCT_FLAG
+    expr: '"Sigma Product Flag"'
+    data_type: VARCHAR(3)
+    description: The flag indicating whether a product is a Sigma product.
+  primary_key:
+    columns:
+    - PRODUCT_RETAIL_MASTER_KEY
+  description: The table contains product information, specifically retail products,
+    categorized by hierarchical levels and wholesale keys. Each record represents
+    a product and includes details about its description, hierarchy, and mapping counts.
+- name: DIM_PRODUCT_VW
+  base_table:
+    database: EDP_PROD
+    schema: PRES
+    table: '"Dim_Product_VW"'
+  dimensions:
+  - name: BRAND
+    synonyms:
+    - maker
+    - manufacturer
+    - label
+    - trademark
+    - name
+    description: The brand name of the product.
+    expr: '"Brand"'
+    data_type: VARCHAR(90)
+  - name: LEVEL_2_NAME
+    synonyms:
+    - category name
+    - subcategory name
+    - level 2 description
+    - secondary category
+    - sub group name
+    description: The second level of categorization for a product, providing a more
+      specific grouping within the product hierarchy.
+    expr: '"Level 2 Name"'
+    data_type: VARCHAR(50)
+  - name: LEVEL_3_NAME
+    synonyms:
+    - third_level_name
+    - level_three_name
+    - third_level_description
+    - level_three_description
+    - third_level_label
+    - level_three_label
+    description: The third level of categorization for a product, providing a more
+      specific grouping within the product hierarchy.
+    expr: '"Level 3 Name"'
+    data_type: VARCHAR(50)
+  - name: PRODUCT_CODE
+    synonyms:
+    - product_id
+    - item_code
+    - product_identifier
+    - product_number
+    - sku
+    - stock_code
+    description: Unique identifier for a product.
+    expr: '"Product Code"'
+    data_type: VARCHAR(40)
+  - name: PRODUCT_KEY
+    synonyms:
+    - product_id
+    - product_identifier
+    - product_code
+    - product_number
+    - item_key
+    - item_id
+    - product_unique_id
+    description: Unique identifier for a product in the product dimension.
+    expr: '"Product Key"'
+    data_type: NUMBER(38,0)
+  - name: PRODUCT_NAME
+    synonyms:
+    - item_name
+    - product_title
+    - product_description
+    - item_description
+    - product_label
+    description: The name of the product as it appears on packaging, marketing materials,
+      and sales orders.
+    expr: '"Product Name"'
+    data_type: VARCHAR(60)
+  primary_key:
+    columns:
+    - PRODUCT_KEY
+  description: The table contains product information, specifically product details
+    and attributes. Each record represents a single product and includes categories
+    such as product type, category, and dimensions, as well as supplier and manufacturer
+    information.
+- name: FACT_RETAIL_POS_VW
+  base_table:
+    database: EDP_PROD
+    schema: PRES
+    table: '"Fact_Retail_POS_VW"'
+  dimensions:
+  - name: CONCATENATED_KEY
+    expr: '"Concatenated Key"'
+    data_type: NUMBER(18,5)
+    description: A concatenated key.
+  - name: CUSTOMER_KEY
+    expr: '"Customer Key"'
+    data_type: NUMBER(38,0)
+    description: Customer key.
+  - name: CUSTOMER_RETAIL_STORE_KEY
+    expr: '"Customer Retail Store Key"'
+    data_type: NUMBER(38,0)
+    description: A unique identifier for each retail store.
+  - name: HIGH_COST_LOW_MARGIN_DRUGS_FLAG
+    expr: '"High Cost Low Margin Drugs Flag"'
+    data_type: VARCHAR(3)
+    description: High Cost Low Margin Drugs Flag.
+  - name: IS_PROMOTION_FLAG
+    expr: '"Is Promotion Flag"'
+    data_type: VARCHAR(3)
+    description: The flag indicating whether a promotion is applied.
+  - name: IS_SCRIPT_FLAG
+    expr: '"Is Script Flag"'
+    data_type: VARCHAR(3)
+    description: Is the script flag.
+  - name: NON_PHARMACY_SALES_FLAG
+    expr: '"Non Pharmacy Sales Flag"'
+    data_type: VARCHAR(2)
+    description: Non Pharmacy Sales Flag.
+  - name: PLANT_KEY
+    expr: '"Plant Key"'
+    data_type: NUMBER(38,0)
+    description: Plant identifier.
+  - name: POS_ID
+    expr: '"POS ID"'
+    data_type: NUMBER(38,0)
+    description: A unique identifier for a point of sale transaction.
+  - name: PRODUCT_RETAIL_MASTER_KEY
+    expr: '"Product Retail Master Key"'
+    data_type: NUMBER(38,0)
+    description: A unique identifier for the product retail master record.
+  - name: PROMOTION_BRIEF_DETAIL_KEY
+    expr: '"Promotion Brief Detail Key"'
+    data_type: NUMBER(38,0)
+    description: A unique identifier for a promotion brief detail.
+  - name: SALES_CODE
+    expr: '"Sales Code"'
+    data_type: VARCHAR(50)
+    description: Sales codes.
+  - name: SALES_DATE_KEY
+    expr: '"Sales Date Key"'
+    data_type: NUMBER(38,0)
+    description: A date representing the sales date.
+  - name: SALES_LINE_CODE
+    expr: '"Sales Line Code"'
+    data_type: VARCHAR(50)
+    description: Sales line code.
+  - name: SALES_TIME_KEY
+    expr: '"Sales Time Key"'
+    data_type: NUMBER(38,0)
+    description: A time key representing the sales time.
+  - name: SALESFORCE_CUSTOMER_KEY
+    expr: '"Salesforce Customer Key"'
+    data_type: NUMBER(38,0)
+    description: The unique identifier assigned to a Salesforce customer.
+  facts:
+  - name: COGS_AMOUNT
+    expr: '"COGS Amount"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: The cost of goods sold amount.
+  - name: DISCOUNT_EX_GST_AMOUNT
+    expr: '"Discount Ex GST Amount"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: Discount amount after Goods and Services Tax (GST) has been deducted.
+  - name: ETHICAL_GP_AMOUNT
+    expr: '"Ethical GP Amount"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: Ethical GP amount.
+  - name: ETHICAL_SALES_AMOUNT
+    expr: '"Ethical Sales Amount"'
+    data_type: NUMBER(20,3)
+    access_modifier: public_access
+    description: Ethical sales amount.
+  - name: ETHICAL_SALES_QUANTITY
+    expr: '"Ethical Sales Quantity"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: Ethical sales quantity.
+  - name: GOVERNMENT_RECOVERY_EX_GST_AMOUNT
+    expr: '"Government Recovery Ex GST Amount"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: Government Recovery Ex GST Amount.
+  - name: GROSS_MARGIN_AMOUNT
+    expr: '"Gross Margin Amount"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: The gross margin amount.
+  - name: GROSS_MARGIN_PERCENTAGE
+    expr: '"Gross Margin Percentage"'
+    data_type: NUMBER(28,9)
+    access_modifier: public_access
+    description: The percentage of the selling price that represents the gross margin.
+  - name: GROSS_PROFIT_AMOUNT
+    expr: '"Gross Profit Amount"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: The gross profit amount.
+  - name: GST_AMOUNT
+    expr: '"GST Amount"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: GST Amount.
+  - name: HIGH_COST_LOW_MARGIN_GP_AMOUNT
+    expr: '"High Cost Low Margin GP Amount"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: High Cost Low Margin Gross Profit Amount.
+  - name: HIGH_COST_LOW_MARGIN_SALES_AMOUNT
+    expr: '"High Cost Low Margin Sales Amount"'
+    data_type: NUMBER(20,3)
+    access_modifier: public_access
+    description: High Cost Low Margin Sales Amount.
+  - name: HIGH_COST_LOW_MARGIN_SALES_QUANTITY
+    expr: '"High Cost Low Margin Sales Quantity"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: High Cost Low Margin Sales Quantity.
+  - name: NON_PHARMACY_GP_AMOUNT
+    expr: '"Non pharmacy GP Amount"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: Non pharmacy GP amount.
+  - name: NON_PHARMACY_SALES_AMOUNT
+    expr: '"Non pharmacy Sales Amount"'
+    data_type: NUMBER(20,3)
+    access_modifier: public_access
+    description: Non pharmacy sales amount.
+  - name: NON_PHARMACY_SALES_QUANTITY
+    expr: '"Non pharmacy Sales Quantity"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: The quantity of non-pharmacy sales.
+  - name: PHARMACY_GP_AMOUNT_EXC_HCLM_
+    expr: '"Pharmacy GP Amount (exc HCLM)"'
+    data_type: NUMBER(21,3)
+    access_modifier: public_access
+    description: Pharmacy gross profit amount, excluding Health Care Learning Management
+      (HCLM), in decimal format.
+  - name: PHARMACY_OTC_GP_AMOUNT
+    expr: '"Pharmacy OTC GP Amount"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: The amount of out-of-pocket expenses for over-the-counter (OTC) medications
+      at pharmacies.
+  - name: PHARMACY_OTC_SALES_AMOUNT
+    expr: '"Pharmacy OTC Sales Amount"'
+    data_type: NUMBER(20,3)
+    access_modifier: public_access
+    description: The total amount of sales for over-the-counter (OTC) pharmacy items.
+  - name: PHARMACY_OTC_SALES_QUANTITY
+    expr: '"Pharmacy OTC Sales Quantity"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: The quantity of OTC pharmacy sales.
+  - name: PHARMACY_SALES_AMOUNT_EXC_HCLM_
+    expr: '"Pharmacy Sales Amount (exc HCLM)"'
+    data_type: NUMBER(22,3)
+    access_modifier: public_access
+    description: Pharmacy sales amount, excluding Health Care Learning Management
+      (HCLM), in a decimal format.
+  - name: PHARMACY_SALES_QUANTITY_EXC_HCLM_
+    expr: '"Pharmacy Sales Quantity (exc HCLM)"'
+    data_type: NUMBER(21,3)
+    access_modifier: public_access
+    description: Pharmacy sales quantity, excluding HCLM, represented as a decimal
+      value.
+  - name: SALES_AMOUNT
+    expr: '"Sales Amount"'
+    data_type: NUMBER(20,3)
+    access_modifier: public_access
+    description: Sales amount.
+  - name: SALES_EX_GST_AMOUNT
+    expr: '"Sales Ex GST Amount"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: Sales amount excluding Goods and Services Tax (GST).
+  - name: SALES_QUANTITY
+    expr: '"Sales Quantity"'
+    data_type: NUMBER(19,3)
+    access_modifier: public_access
+    description: The quantity of items sold.
+  description: The table contains records of retail sales transactions, specifically
+    point-of-sale data. Each record represents a single transaction and includes details
+    about the product, customer, and sales information.
+relationships:
+- name: DIM_PRODUCT_RETAIL_MASTER_VW_TO_DIM_PRODUCT_VW
+  left_table: DIM_PRODUCT_RETAIL_MASTER_VW
+  right_table: DIM_PRODUCT_VW
+  relationship_columns:
+  - left_column: PRIMARY_WHOLESALE_PRODUCT_KEY
+    right_column: PRODUCT_KEY
+  relationship_type: one_to_one
+- name: FACT_RETAIL_POS_VW_TO_DIM_CUSTOMER_RETAIL_STORE_VW
+  left_table: FACT_RETAIL_POS_VW
+  right_table: DIM_CUSTOMER_RETAIL_STORE_VW
+  relationship_columns:
+  - left_column: CUSTOMER_RETAIL_STORE_KEY
+    right_column: CUSTOMER_RETAIL_STORE_KEY
+  relationship_type: many_to_one
+- name: FACT_RETAIL_POS_VW_TO_DIM_DATE_VW
+  left_table: FACT_RETAIL_POS_VW
+  right_table: DIM_DATE_VW
+  relationship_columns:
+  - left_column: SALES_DATE_KEY
+    right_column: DATE_KEY
+  relationship_type: many_to_one
+- name: FACT_RETAIL_POS_VW_TO_DIM_PRODUCT_RETAIL_MASTER_VW
+  left_table: FACT_RETAIL_POS_VW
+  right_table: DIM_PRODUCT_RETAIL_MASTER_VW
+  relationship_columns:
+  - left_column: PRODUCT_RETAIL_MASTER_KEY
+    right_column: PRODUCT_RETAIL_MASTER_KEY
+  relationship_type: many_to_one

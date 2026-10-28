@@ -1,0 +1,55 @@
+parameters:
+  - name: VARIABLE_GROUP_ENV
+    type: string
+    default: vg-analytics-database-sandpit
+  - name: SCHEMA
+    type: string
+    default: CORE
+  - name: BUILD_ID
+    type: string
+    default: main
+
+variables:
+  - group: ${{ parameters.VARIABLE_GROUP_ENV }}
+  - name: SNOWSQL_ACCOUNT
+    value: $(SNOWFLAKE_ACCOUNT_NAME)
+  - name: SNOWSQL_USER
+    value: $(SNOWFLAKE_DEVOPS_USERNAME)
+  - name: SNOWFLAKE_PASSWORD
+    value: $(SNOWFLAKE_DEVOPS_SECRET)
+  - name: SNOWSQL_ROLE
+    value: $(SNOWFLAKE_ROLENAME)
+  - name: SNOWSQL_WAREHOUSE
+    value: $(SNOWFLAKE_WAREHOUSE)
+  - name: SNOWSQL_DATABASE
+    value: $(SNOWFLAKE_DATABASE_NAME)
+  - name: SNOWSQL_SCHEMA
+    value: ${{ parameters.SCHEMA }}
+  - name: PRIVATE_KEY
+    value: $(SNOWFLAKE_PRIVATE_KEY_AUTH)
+  - name: PASSPHRASE
+    value: $(SNOWFLAKE_PRIVATE_PASSPHRASE)
+  - name: ANALYST_DATABASE
+    value: EDP_ANALYTICS_SANDPIT
+  - name: ANALYST_SCHEMA
+    value: LLM_APP
+  - name: QUESTION_STAGE
+    value: EVAL
+  - name: EVAL_CODE_STAGE
+    value: CODE
+  - name: EVAL_PIPELINE_PACKAGE_NAME
+    value: eval_pipeline_src_${{ parameters.BUILD_ID }}
+  - name: EVAL_PIPELINE_PROCEDURE_NAME
+    value: CORTEX_ANALYST_AGENT_SQL_EVAL
+  - name: EVAL_LOG_TBL_NAME
+    value: CORTEX_ANALYST_AGENT_SQL_EVAL_LOG
+  - name: EVAL_SPROC_HANDLER
+    value: sql_eval_src.evaluation.batch_eval
+  - name: ANALYST_STAGE
+    value: SEMANTIC_MODELS
+  - name: ANALYST_WAREHOUSE
+    value: ANALYTICS_ANALYSIS_SANDPIT_WH
+  - name: AGENT_DATABASE
+    value: SNOWFLAKE_INTELLIGENCE
+  - name: AGENT_SCHEMA
+    value: AGENTS

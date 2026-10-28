@@ -1,0 +1,38 @@
+variables:
+  agentVersion: 'v2'
+  
+database: SNOWFLAKE_INTELLIGENCE
+schema: AGENTS
+createMode: ifNotExists
+name: RETAIL_PERFORMANCE_AGENT_${agentVersion}
+comment: "The AI agent that produces insights for retail performance related queries"
+profile:
+  display_name: RETAIL_PERFORMANE_AGENT_${agentVersion}
+models:
+  orchestration: "claude-4-sonnet"
+instructions:
+  response: >
+    Provide insights summary of the resulting datasets and BI like visualizations.
+    You will respond in a professional, friendly, and concise manner.
+  orchestration: >
+    For all queries make use of the cortex analyst and look-up the semantic model information; Make educated assumptions
+    where required - ensure to include the assumptions in the repsonses where needed.
+  system: >
+    provide insights summary of the resulting datasets and BI like visualizations.
+    You will respond in a professional, friendly, and concise manner.
+orchestration:
+  budget:
+    seconds : 30
+    tokens: 16000
+tools:
+  - tool_spec:
+      type: cortex_analyst_text_to_sql
+      name: <name_of_the_tool>
+      description: <description of the tool>
+      tool_resources:
+        semantic_model_file : <path_to_file>
+        execution_environment:
+          type: warehouse
+          warehouse: <warehouse>
+          query_timeout: 60
+

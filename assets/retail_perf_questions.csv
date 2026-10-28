@@ -1,0 +1,60 @@
+RUN_ID,SEMANTIC_MODEL_TYPE,SEMANTIC_NAME,AGENT_DATABASE,AGENT_SCHEMA,AGENT_NAME,USER_QUESTION,REFERENCE_SQL
+1,VIEW,EDP_ANALYTICS_SANDPIT.LLM_APP.RETAIL_PERFORMANCE_DRAFT_PSONG_4,,,,Comparison across banner group in terms of year-to-year sales growth percentage.,"with yearly_sales as 
+(SELECT
+b.""Year"" as year,
+c.""Banner Group Name"" as banner_group,
+SUM(a.""Sales Amount"") AS yearly_sales_amount
+FROM edp_prod.pres.""Fact_Retail_POS_VW"" a
+LEFT JOIN edp_prod.pres.""Dim_Date_VW"" b
+ON a.""Sales Date Key"" = b.""Date Key""
+LEFT JOIN edp_prod.pres.""Dim_Customer_Retail_Store_VW"" c
+ON a.""Customer Retail Store Key""=c.""Customer Retail Store Key""
+group by all
+)
+
+SELECT
+curr.year AS curr_year,
+prev.year AS prev_year,
+curr.banner_group,
+curr.yearly_sales_amount AS curr_yearly_sales,
+prev.yearly_sales_amount AS prev_yearly_sales,
+curr.yearly_sales_amount - prev.yearly_sales_amount AS yoy_chg,
+(curr.yearly_sales_amount - prev.yearly_sales_amount) / NULLIF(NULLIF(prev.yearly_sales_amount, 0), 0) AS yoy_pct_chg
+FROM yearly_sales AS curr
+LEFT JOIN yearly_sales AS prev
+ON curr.year = prev.year + 1 
+AND curr.banner_group = prev.banner_group
+where prev_year is not null
+order by banner_group, curr_year
+;"
+2,VIEW,EDP_ANALYTICS_SANDPIT.LLM_APP.RETAIL_PERFORMANCE_DRAFT_PSONG_4,,,,The store with highest sales amount in the last month for each banner group.,"with last_month_sales as 
+(SELECT
+date(b.""Month Start Date"") as month_start_date,
+c.""Banner Group Name"" as banner_group,
+c.""Store Name"" as store_name,
+a.""Customer Retail Store Key"" as store_key,
+SUM(a.""Sales Amount"") AS monthly_sales_amount
+FROM edp_prod.pres.""Fact_Retail_POS_VW"" a
+LEFT JOIN edp_prod.pres.""Dim_Date_VW"" b
+ON a.""Sales Date Key"" = b.""Date Key""
+LEFT JOIN edp_prod.pres.""Dim_Customer_Retail_Store_VW"" c
+ON a.""Customer Retail Store Key""=c.""Customer Retail Store Key""
+where month_start_date = dateadd('month',-1,date_trunc('month',current_date()))
+group by all
+)
+
+select 
+banner_group,
+store_name,
+monthly_sales_amount
+from 
+(
+select 
+banner_group,
+store_name,
+monthly_sales_amount,
+ROW_NUMBER() OVER (PARTITION BY banner_group ORDER BY monthly_sales_amount DESC) as store_rank
+from last_month_sales
+)
+where store_rank=1
+;"

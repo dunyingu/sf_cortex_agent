@@ -1,0 +1,36 @@
+CREATE OR REPLACE PROCEDURE &database.&schema.&procedure_name(
+schema_name STRING,
+stage_name STRING,
+question_file_path STRING,
+log_table_name STRING
+)
+RETURNS TABLE (
+    --RUN_ID STRING,
+    --SEMANTIC_NAME STRING,
+    --AGENT_DATABASE STRING,
+    --AGENT_SCHEMA STRING,
+    --AGENT_NAME STRING,
+    --USER_QUESTION STRING,
+    --REFERENCE_SQL STRING,
+    --GENERATED_SQL STRING,
+    --ROWCOUNT_REF NUMBER,
+    --ROWCOUNT_GEN NUMBER,
+    --UNIROWCOUNT_REF NUMBER,
+    --UNIROWCOUNT_GEN NUMBER,
+    --COLCOUNT_REF NUMBER,
+    --COLCOUNT_GEN NUMBER,
+    --LLM_JUDGE STRING,
+    --LLM_REVELANCE NUMBER,
+    --LLM_SEMANTIC_EQUIVALENCE NUMBER,
+    --LLM_CORRECTNESS NUMBER,
+    --LLM_COMPREHENSIVENESS NUMBER,
+    --LLM_RESULT_SET_EQUIVALENCE NUMBER,
+    --LLM_FIX STRING,
+    --EVAL_TIMESTAMP TIMESTAMP
+    )
+LANGUAGE PYTHON
+RUNTIME_VERSION = '3.11'
+PACKAGES = ('snowflake==1.7.0', 'snowflake-snowpark-python==1.37.0','snowflake-ml-python==1.12.0','joblib==1.5.1','pandas==2.3.2') 
+IMPORTS = ('@&database.&schema.&stage/&package_name.zip')
+HANDLER = '&handler'
+EXECUTE AS CALLER;

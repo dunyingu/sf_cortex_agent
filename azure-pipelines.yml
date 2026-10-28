@@ -1,0 +1,109 @@
+trigger:
+- main
+- feature/*
+
+stages:
+  - stage:
+    variables:
+      - name: fetchDepth
+        value: 0
+      - ${{ if contains(variables['Build.SourceBranch'], 'feature/') }}:
+          - template: azure_templates/connection_variables_feat.yml
+            parameters:
+              VARIABLE_GROUP_ENV: vg-analytics-database-sandpit
+      - ${{ if contains(variables['Build.SourceBranch'], 'main') }}:
+        - template: azure_templates/connection_variables_main.yml
+          parameters:
+            VARIABLE_GROUP_ENV: vg-analytics-database-sandpit
+    jobs:
+    - job: CICD
+      displayName: CICD for NLP 2 BI portal
+      strategy:
+        matrix:
+          Python311:
+            python.version: '3.11'
+      pool:
+        vmImage: ubuntu-latest
+      steps:      
+      - task: UsePythonVersion@0
+        inputs:
+          versionSpec: '$(python.version)'
+        displayName: 'Use Python $(python.version)'
+
+      - checkout: self
+        fetchDepth: $(fetchDepth)
+        displayName: "checkout code"
+
+      - script: |
+          echo 'Installing zip'
+          sudo apt-get install zip
+          echo 'Starting snowflake CLI installation'
+          python --version
+          echo 'Step 1: installing snowsql'
+          curl -O https://sfc-repo.snowflakecomputing.com/snowsql/bootstrap/1.3/linux_x86_64/snowsql-1.3.3-linux_x86_64.bash 
+          SNOWSQL_DEST=~/snowflake SNOWSQL_LOGIN_SHELL=~/.profile bash snowsql-1.3.3-linux_x86_64.bash
+          echo 'Test installation'
+          ~/snowflake/snowsql -v
+        displayName: 'Installing Snowflake CLI' 
+        env:
+          SNOWSQL_PWD: $(SNOWFLAKE_PASSWORD)
+
+      - script: |
+          chmod +x detect_changes.sh service_upload_deploy.sh
+          ./detect_changes.sh
+        displayName: 'Detect code changes'
+        env:
+          BUILD_REASON: $(Build.Reason)
+          SYSTEM_PULLREQUEST_TARGETBRANCH: $(System.PullRequest.TargetBranch)
+
+      - script : |
+          echo 'Setting permissions for deploy scripts'
+          ./service_upload_deploy.sh --function "upload" --stage "$(QUESTION_STAGE)" --database "$(ANALYST_DATABASE)" --schema "$(ANALYST_SCHEMA)" --proj_root "$(System.DefaultWorkingDirectory)"
+        condition: eq(variables['evalQuestionsUpdated'], 'true')
+        displayName: "Uploading Questions file to stage"
+        env:
+          SNOWSQL_PWD: $(SNOWFLAKE_PASSWORD)
+
+      - script: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+        condition: or(eq(variables['semanticModelChanged'], 'true'), eq(variables['agentCodeChange'], 'true'))
+        displayName: 'Installing dependencies'
+
+      - script: |
+          echo "$(SNOWFLAKE_PRIVATE_KEY_AUTH)" > /tmp/private_key.pem
+          chmod 600 /tmp/private_key.pem
+          python3 src/jwt_auth.py --account "$(SNOWSQL_ACCOUNT)" --user "$(SNOWSQL_USER)" --private_key_file_path '/tmp/private_key.pem'
+        displayName: 'Generate JWT'
+        condition: or(eq(variables['semanticModelChanged'], 'true'), eq(variables['agentCodeChange'], 'true'))
+        env:
+          PRIVATE_KEY_PASSPHRASE: $(SNOWFLAKE_PRIVATE_PASSPHRASE)
+
+      - script: |
+          python3 main.py --analyst_database "$(ANALYST_DATABASE)" --analyst_schema "$(ANALYST_SCHEMA)" --analyst_stage "$(ANALYST_STAGE)" --analyst_warehouse "$(ANALYST_WAREHOUSE)" --agent_database "$(AGENT_DATABASE)" --agent_schema "$(AGENT_SCHEMA)" --no-enrich_semantic_model
+        displayName: 'Agent Creation Pipeline'
+        condition:  or(eq(variables['semanticModelChanged'], 'true'), eq(variables['agentCodeChange'], 'true'))
+        env:
+          ACCOUNT : $(SNOWSQL_ACCOUNT)
+          PASSWORD: $(SNOWFLAKE_PASSWORD)
+          USER: $(SNOWSQL_USER)
+          ROLE: $(SNOWSQL_ROLE)
+          WAREHOUSE: $(SNOWSQL_WAREHOUSE)
+          SCHEMA: $(SNOWSQL_SCHEMA)
+          DATABASE : $(SNOWSQL_DATABASE)
+          JWT_TOKEN : $(JWT_TOKEN)
+
+      - script: |
+          ./service_upload_deploy.sh --function "deploy_sproc" --database "$(ANALYST_DATABASE)" --schema "$(ANALYST_SCHEMA)" --proj_root "$(System.DefaultWorkingDirectory)" --procedure_name "$(EVAL_PIPELINE_PROCEDURE_NAME)" --package_name "$(EVAL_PIPELINE_PACKAGE_NAME)" --handler "$(EVAL_SPROC_HANDLER)" --stage "$(EVAL_CODE_STAGE)" --eval_log_table "$(EVAL_LOG_TBL_NAME)"
+        displayName: 'Deploying Eval Pipeline SPROC'
+        condition: eq(variables['evalCodeChange'], 'true')
+        env:
+          SNOWSQL_PWD: $(SNOWFLAKE_PASSWORD)
+
+
+      - script: |
+          ./service_upload_deploy.sh --function "run_sproc" --database "$(ANALYST_DATABASE)" --schema "$(ANALYST_SCHEMA)" --procedure_name "$(EVAL_PIPELINE_PROCEDURE_NAME)"  --stage "$(QUESTION_STAGE)" --eval_log_table "$(EVAL_LOG_TBL_NAME)"
+        displayName: 'Invoking the Evaluation sproc'
+        condition: eq(variables['evalQuestionsUpdated'], 'true')
+        env:
+          SNOWSQL_PWD: $(SNOWFLAKE_PASSWORD)

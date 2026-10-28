@@ -1,0 +1,38 @@
+CREATE TABLE IF NOT EXISTS &database.&schema.&log_table_name (
+  --RUN_ID                        NUMBER NOT NULL autoincrement start 1 increment 1 order,--#STRING,
+  RUN_ID                        STRING,
+  --SEMANTIC_DATABASE           STRING,
+  --SEMANTIC_SCHEMA             STRING,
+  SEMANTIC_MODEL_TYPE         STRING,
+  SEMANTIC_NAME               STRING,
+  --SEMANTIC_VERSION            FLOAT,
+  AGENT_DATABASE                STRING,
+  AGENT_SCHEMA                  STRING,
+  AGENT_NAME                    STRING,
+  --AGENT_VERSION                 FLOAT,
+  USER_QUESTION                 STRING,
+  REFERENCE_SQL                 STRING,
+  GENERATED_SQL                 STRING,
+  ROWCOUNT_REF                  NUMBER,
+  ROWCOUNT_GEN                  NUMBER,
+  UNIROWCOUNT_REF               NUMBER,
+  UNIROWCOUNT_GEN               NUMBER,
+  COLCOUNT_REF                  NUMBER,
+  COLCOUNT_GEN                  NUMBER,
+  --COL_SCHEMA_MATCH              BOOLEAN,
+  --DUPLICATES_EQUAL              BOOLEAN,
+  --ROW_MATCH_PRECISION           FLOAT,
+  --ROW_MATCH_RECALL              FLOAT,
+  --ROW_MATCH_F1                  FLOAT,
+  --NUMERIC_DELTAS                VARIANT,     -- map of column->stats or row-wise summaries
+  --SAMPLE_DIFF                   VARIANT,     -- example rows from symmetric difference
+  LLM_JUDGE                     STRING,
+  --JUDGE_JSON                    VARIANT,     -- structured json from AI_COMPLETE
+  LLM_REVELANCE                 NUMBER,
+  LLM_SEMANTIC_EQUIVALENCE      NUMBER,
+  LLM_CORRECTNESS               NUMBER,
+  LLM_COMPREHENSIVENESS         NUMBER,
+  LLM_RESULT_SET_EQUIVALENCE    NUMBER,
+  LLM_FIX                       STRING,
+  EVAL_TIMESTAMP                TIMESTAMP_LTZ DEFAULT CURRENT_TIMESTAMP()
+);
